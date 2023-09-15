@@ -3,7 +3,7 @@ import sv_ttk
 from .player import Player
 
 
-class Fenetre(tk.Tk):
+class Window(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("Beat machine")
