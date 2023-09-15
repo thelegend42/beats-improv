@@ -16,6 +16,9 @@ class Fenetre(tk.Tk):
 
         self.player = Player()
 
+        self.volume_fader = None
+        self.volume = tk.DoubleVar()
+
         self.create_widget()
 
     def create_widget(self):
@@ -23,7 +26,7 @@ class Fenetre(tk.Tk):
                                 text="LoFi",
                                 width=self.button_width,
                                 height=self.button_height,
-                                command=self.toggle_lofi,
+                                command=lambda: self.toggle_beat(self.player.lofi),
                                 font=self.police
                                 )
         lofi_button.grid(row=10, column=10)
@@ -32,18 +35,24 @@ class Fenetre(tk.Tk):
                                   text="Groovy",
                                   width=self.button_width,
                                   height=self.button_height,
-                                  command=self.toggle_groovy,
+                                  command=lambda: self.toggle_beat(self.player.groovy),
                                   font=self.police)
         groovy_button.grid(row=10, column=20)
 
-    def toggle_lofi(self):
-        if self.player.current_beat != self.player.lofi:
-            self.player.play(self.player.lofi)
-        else:
-            self.player.stop(self.player.lofi)
+        self.volume_fader = tk.Scale(self, from_=100, to=0, orient="vertical", variable=self.volume, command=self.update_volume)
+        self.volume_fader.set(100)
+        self.volume_fader.grid(row=10, column=100, columnspan=100)
+        self.update_volume()
 
-    def toggle_groovy(self):
-        if self.player.current_beat != self.player.groovy:
-            self.player.play(self.player.groovy)
+    def toggle_beat(self, beat):
+        if self.player.current_beat != beat:
+            self.player.play(beat)
         else:
-            self.player.stop(self.player.groovy)
+            self.player.stop(beat)
+            self.player.current_beat = None
+        self.update_volume()
+
+    def update_volume(self, *args):
+        if self.player.current_beat is not None:
+            volume = self.volume.get() / 100.0
+            self.player.current_beat.set_volume(volume)
