@@ -20,6 +20,7 @@ class Window(tk.Tk):
 
         self.volume_fader = None
         self.volume = tk.DoubleVar()
+        self.indicator_label = None
 
         self.create_widget()
 
@@ -60,12 +61,19 @@ class Window(tk.Tk):
                                 font=self.police)
         stop_button.grid(row=1, column=30, rowspan=10)
 
+        self.indicator_label = tk.Label(self,
+                                        text="ÇA JOUE!",
+                                        bg="black",
+                                        width=self.button_width,
+                                        height=self.button_height)
+        self.indicator_label.grid(row=1, column=40, rowspan=10)
+
     def toggle_beat(self, beat):
         if self.player.current_beat != beat:
             self.player.play(beat)
+            self.indicator_label.config(bg="red")
         else:
-            self.player.stop(beat)
-            self.player.current_beat = None
+            self.stop_all_beats()
         self.update_volume()
 
     def update_volume(self, *args):
@@ -77,3 +85,4 @@ class Window(tk.Tk):
         if self.player.current_beat:
             self.player.stop(self.player.current_beat)
             self.player.current_beat = None
+            self.indicator_label.config(bg="black")
