@@ -54,7 +54,7 @@ class Window(tk.Tk):
         self.update_volume()
 
         stop_button = tk.Button(self,
-                                text="Stop",
+                                text="STOP!",
                                 width=self.button_width,
                                 height=self.button_height,
                                 command=self.stop_all_beats,
@@ -62,7 +62,7 @@ class Window(tk.Tk):
         stop_button.grid(row=1, column=30, rowspan=10)
 
         self.indicator_label = tk.Label(self,
-                                        text="ÇA JOUE!",
+                                        text="PLAYING!",
                                         bg="black",
                                         width=self.button_width,
                                         height=self.button_height)
